@@ -7,22 +7,27 @@ const interfaceForRiding = readline.createInterface({
   output: process.stdout,
 });
 
+interfaceForRiding.on('SIGINT', () => {
+  process.emit('SIGINT');
+});
+
 const filePath = path.join(__dirname, 'output.txt');
 
 const writeData = fs.createWriteStream(filePath, { flags: 'a' });
+console.log('Введите текст');
 
 interfaceForRiding.on('line', (text) => {
   if (text.trim().toLowerCase() === 'exit') {
     exitProgram();
   } else {
     writeData.write(text + '\n', () => {
-      console.log('complete');
+      console.log('Запись завершена');
     });
   }
 });
 
 const exitProgram = () => {
-  console.log('Exit');
+  console.log('Выход');
   interfaceForRiding.close();
   writeData.end();
 };
